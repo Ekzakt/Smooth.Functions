@@ -31,11 +31,13 @@ jobs:
           include-prerelease: false
 
       # Step 3: Restore and Build
-      - name: 'Restore and Build Project'
-        run: |
-          dotnet restore
-          dotnet build --configuration Release --output ./output
-
+      # - name: 'Restore and Build Project'
+        # run: |
+          # dotnet restore
+          # dotnet build --configuration Release --output ./output
+      - name: Build the Solution
+        run: dotnet build Smooth.Functions.sln --configuration Release
+        
       # Step 4: Zip the Build Output
       - name: 'Create ZIP File for Deployment'
         run: |
