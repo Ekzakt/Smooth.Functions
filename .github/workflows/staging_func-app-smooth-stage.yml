@@ -19,10 +19,10 @@ jobs:
         with:
           submodules: false
 
-      - name: 'Clone submodules in the correct location'
-        run: |
-          git clone https://github.com/Ekzakt/Ekzakt.FileChecker ../Ekzakt.FileChecker
-          git clone https://github.com/Ekzakt/Ekzakt.RemoteApiService ../Ekzakt.RemoteApiService
+      # - name: 'Clone submodules in the correct location'
+        # run: |
+          # git clone https://github.com/Ekzakt/Ekzakt.FileChecker ../Ekzakt.FileChecker
+          # git clone https://github.com/Ekzakt/Ekzakt.RemoteApiService ../Ekzakt.RemoteApiService
 
       - name: 'Set up .NET Environment'
         uses: actions/setup-dotnet@v1
@@ -30,14 +30,14 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
           include-prerelease: false
 
-      # Step 3: Restore and Build
-      # - name: 'Restore and Build Project'
-        # run: |
-          # dotnet restore
-          # dotnet build --configuration Release --output ./output
+      Step 3: Restore and Build
+      - name: 'Restore and Build Project'
+        run: |
+          dotnet restore
+          dotnet build --configuration Release --output ./output
           
-      - name: Build the Solution
-        run: dotnet build Smooth.Functions.sln --configuration Release
+      # - name: Build the Solution
+        # run: dotnet build Smooth.Functions.sln --configuration Release
         
       # Step 4: Zip the Build Output
       - name: 'Create ZIP File for Deployment'
