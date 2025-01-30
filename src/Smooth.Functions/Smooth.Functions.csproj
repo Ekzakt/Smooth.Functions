@@ -25,8 +25,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Ekzakt.Services\Ekzakt.FileChecker\src\Ekzakt.FileChecker\Ekzakt.FileChecker.csproj" />
-    <ProjectReference Include="..\..\..\..\Ekzakt.Services\Ekzakt.RemoteApiService\src\Ekzakt.RemoteApiService.csproj" />
+    <ProjectReference Include="..\Ekzakt.FileChecker\src\Ekzakt.FileChecker\Ekzakt.FileChecker.csproj" />
+    <ProjectReference Include="..\Ekzakt.RemoteApiService\src\Ekzakt.RemoteApiService.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
