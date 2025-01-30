@@ -1,6 +1,0 @@
-[submodule "src/Ekzakt.RemoteApiService"]
-	path = src/Ekzakt.RemoteApiService
-	url = https://github.com/Ekzakt/Ekzakt.RemoteApiService
-[submodule "src/Ekzakt.FileChecker"]
-	path = src/Ekzakt.FileChecker
-	url = https://github.com/Ekzakt/Ekzakt.FileChecker
