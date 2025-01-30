@@ -1,5 +1,7 @@
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Hosting;
+using Ekzakt.RemoteApiService.Configuration;
+using Ekzakt.FileChecker.Configuration;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
@@ -10,7 +12,11 @@ builder.ConfigureFunctionsWebApplication();
 //     .AddApplicationInsightsTelemetryWorkerService()
 //     .ConfigureFunctionsApplicationInsights();
 
+builder.Services.AddFileChecker();
 
-
+builder.Services.AddRemoteApiServices(new Dictionary<string, string>
+{
+    { "SmoothShopApi", "https://shop.smooth.local" }
+});
 
 builder.Build().Run();
