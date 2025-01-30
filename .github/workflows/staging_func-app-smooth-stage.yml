@@ -17,12 +17,12 @@ jobs:
       - name: 'Checkout Code'
         uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: false
 
-      # - name: 'Clone submodules in the correct location'
-        # run: |
-          # git clone https://github.com/Ekzakt/Ekzakt.FileChecker ../Ekzakt.FileChecker
-          # git clone https://github.com/Ekzakt/Ekzakt.RemoteApiService ../Ekzakt.RemoteApiService
+      - name: 'Clone submodules in the correct location'
+        run: |
+          git clone https://github.com/Ekzakt/Ekzakt.FileChecker ../Ekzakt.FileChecker
+          git clone https://github.com/Ekzakt/Ekzakt.RemoteApiService ../Ekzakt.RemoteApiService
 
       - name: 'Set up .NET Environment'
         uses: actions/setup-dotnet@v1
@@ -30,9 +30,6 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
           include-prerelease: false
 
-      - name: Debug File Structure
-        run: ls -R
-        
       # Step 3: Restore and Build
       # - name: 'Restore and Build Project'
         # run: |
