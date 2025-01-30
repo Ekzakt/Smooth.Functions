@@ -5,9 +5,11 @@ VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smooth.Functions", "src\Smooth.Functions\Smooth.Functions.csproj", "{9BE8C872-250B-49C2-9E86-B9D6DA4FA868}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ekzakt.RemoteApiService", "..\..\Ekzakt.Services\Ekzakt.RemoteApiService\src\Ekzakt.RemoteApiService.csproj", "{F04E1FAA-0AE7-44FB-983C-2F6A4D005145}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smooth.Test", "src\Smooth.Test\Smooth.Test.csproj", "{45791296-94AB-4E76-A6C3-D28609EC573C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ekzakt.FileChecker", "..\..\Ekzakt.Services\Ekzakt.FileChecker\src\Ekzakt.FileChecker\Ekzakt.FileChecker.csproj", "{727F0769-325E-4EAA-9C41-90CBFAC7469F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ekzakt.FileChecker", "src\Ekzakt.FileChecker\Ekzakt.FileChecker.csproj", "{53857A04-737E-4100-B036-62208595AD4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ekzakt.RemoteApiService", "src\Ekzakt.RemoteApiService\Ekzakt.RemoteApiService.csproj", "{FBB9E836-E60E-4F77-B40C-176000F04EE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +21,18 @@ Global
 		{9BE8C872-250B-49C2-9E86-B9D6DA4FA868}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BE8C872-250B-49C2-9E86-B9D6DA4FA868}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BE8C872-250B-49C2-9E86-B9D6DA4FA868}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F04E1FAA-0AE7-44FB-983C-2F6A4D005145}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F04E1FAA-0AE7-44FB-983C-2F6A4D005145}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F04E1FAA-0AE7-44FB-983C-2F6A4D005145}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F04E1FAA-0AE7-44FB-983C-2F6A4D005145}.Release|Any CPU.Build.0 = Release|Any CPU
-		{727F0769-325E-4EAA-9C41-90CBFAC7469F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{727F0769-325E-4EAA-9C41-90CBFAC7469F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{727F0769-325E-4EAA-9C41-90CBFAC7469F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{727F0769-325E-4EAA-9C41-90CBFAC7469F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45791296-94AB-4E76-A6C3-D28609EC573C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45791296-94AB-4E76-A6C3-D28609EC573C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45791296-94AB-4E76-A6C3-D28609EC573C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45791296-94AB-4E76-A6C3-D28609EC573C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53857A04-737E-4100-B036-62208595AD4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53857A04-737E-4100-B036-62208595AD4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53857A04-737E-4100-B036-62208595AD4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53857A04-737E-4100-B036-62208595AD4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBB9E836-E60E-4F77-B40C-176000F04EE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBB9E836-E60E-4F77-B40C-176000F04EE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBB9E836-E60E-4F77-B40C-176000F04EE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBB9E836-E60E-4F77-B40C-176000F04EE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
