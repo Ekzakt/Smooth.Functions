@@ -30,11 +30,15 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
           include-prerelease: false
 
+      - name: Debug File Structure
+        run: ls -R
+        
       # Step 3: Restore and Build
       # - name: 'Restore and Build Project'
         # run: |
           # dotnet restore
           # dotnet build --configuration Release --output ./output
+          
       - name: Build the Solution
         run: dotnet build Smooth.Functions.sln --configuration Release
         
