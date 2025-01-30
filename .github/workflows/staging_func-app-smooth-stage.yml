@@ -17,12 +17,12 @@ jobs:
       - name: 'Checkout Code'
         uses: actions/checkout@v4
         with:
-          submodules: false
+          submodules: recursive
 
-      - name: 'Clone submodules in the correct location'
-        run: |
-          git clone https://github.com/Ekzakt/Ekzakt.FileChecker ../Ekzakt.FileChecker
-          git clone https://github.com/Ekzakt/Ekzakt.RemoteApiService ../Ekzakt.RemoteApiService
+      # - name: 'Clone submodules in the correct location'
+        # run: |
+          # git clone https://github.com/Ekzakt/Ekzakt.FileChecker ../Ekzakt.FileChecker
+          # git clone https://github.com/Ekzakt/Ekzakt.RemoteApiService ../Ekzakt.RemoteApiService
 
       - name: 'Set up .NET Environment'
         uses: actions/setup-dotnet@v1
