@@ -14,30 +14,26 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout Code
       - name: 'Checkout Code'
         uses: actions/checkout@v4
 
-      # Step 2: Set up .NET
       - name: 'Set up .NET Environment'
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
+          include-prerelease: false
 
-      # Step 3: Restore and Build
       - name: 'Restore and Build Project'
         run: |
           dotnet restore
           dotnet build --configuration Release --output ./output
-
-      # Step 4: Zip the Build Output
+        
       - name: 'Create ZIP File for Deployment'
         run: |
           cd ./output
           zip -r ../functionapp.zip .
           cd ..
 
-      # Step 5: Deploy to Azure Function App
       - name: 'Deploy to Azure Function App'
         uses: Azure/functions-action@v1
         with:
