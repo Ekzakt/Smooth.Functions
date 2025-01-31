@@ -1,7 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/azure/functions-action
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy dotnet core project to Azure Function App - func-smooth-stage
+name: Build and Deploy to Azure Function App - func-app-smooth-stage
 
 on:
   push:
@@ -10,44 +7,37 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '9.0.x' # set this to the dotnet version to use
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # Path to your project (default is the root)
+  DOTNET_VERSION: '9.0.x' # .NET version to use
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
-
     steps:
-      - name: 'Checkout GitHub Action'
+      - name: 'Checkout Code'
         uses: actions/checkout@v4
 
-      - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
+      - name: 'Set up .NET Environment'
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
+          include-prerelease: false
 
-      - name: 'Resolve Project Dependencies Using Dotnet'
-        shell: bash
+      - name: 'Restore and Build Project'
         run: |
-          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          dotnet restore
           dotnet build --configuration Release --output ./output
-          popd
-      
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_8F2840604BED4C70BC7214D2B68DC8CD }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_22C8CF94286F4AFD9E59D2ED265FB31C }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_EA447FF5D9644C7296B3C409C3A25075 }}
+        
+      - name: 'Create ZIP File for Deployment'
+        run: |
+          cd ./output
+          zip -r ../functionapp.zip .
+          cd ..
 
-      - name: 'Run Azure Functions Action'
+      - name: 'Deploy to Azure Function App'
         uses: Azure/functions-action@v1
-        id: fa
         with:
-          app-name: 'func-smooth-stage'
-          slot-name: 'Production'
-          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-          
+          app-name: 'func-app-smooth-stage' # Azure Function App name
+          slot-name: 'Production' # Deployment slot (default is Production)
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D0CE675987B641DBBD8569436496A4D2 }}
+          package: './functionapp.zip'
