@@ -27,7 +27,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Ekzakt.FileChecker\Ekzakt.FileChecker.csproj" />
     <ProjectReference Include="..\Ekzakt.RemoteApiService\Ekzakt.RemoteApiService.csproj" />
-    <ProjectReference Include="..\Smooth.Test\Smooth.Test.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
