@@ -4,6 +4,7 @@ using Ekzakt.FileChecker.Contracts;
 using Ekzakt.RemoteApiService.Services;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using Smooth.Functions.Requests;
 
 namespace Smooth.Functions;
 
@@ -27,20 +28,19 @@ public class ProcessMedia
     [Function(nameof(ProcessMedia))]
     public async Task Run(
         [BlobTrigger("%SourceContainerName%/{name}", 
-        Connection = "AzureWebJobsStorage")] Stream stream,
+        Connection = "AzureWebJobsStorage")] Stream fileStream,
         string name)
     {
-        bool isValid = await CheckFileAsync(stream, name);
+        long uploadFinishedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        bool isValid = await CheckFileAsync(fileStream, name);
         if (!isValid)
         {
             _logger.LogError($"File '{name}' is invalid.");
-
-            // await _apiService.PostDataAsync("file/reject", new UploadRejectRequest { FileName = name });
             return;
         }
 
-
         var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage") ?? string.Empty;
+        var apiUrl = Environment.GetEnvironmentVariable("ApiUrl") ?? string.Empty;
         var targetContainerName = Environment.GetEnvironmentVariable("TargetContainerName") ?? string.Empty;
         var sourceContainerName = Environment.GetEnvironmentVariable("SourceContainerName") ?? string.Empty;
 
@@ -53,15 +53,20 @@ public class ProcessMedia
         var targetBlobClient = targetContainerClient.GetBlobClient(name);
 
         
-
         _logger.LogInformation($"Copying blob '{name}' from '{sourceContainerName}' to '{targetContainerName}'...");
         await targetBlobClient.StartCopyFromUriAsync(sourceBlobClient.Uri);
         _logger.LogInformation($"Successfully copied blob '{name}' to container '{targetContainerName}'.");
 
 
-        //var result = await _apiService.PostDataAsync("file/confirm", new UploadConfirmRequest { FileName = name });
+        var result = await _apiService.PostDataAsync(
+            url: "/file/confirm", 
+            data: new ConfirmUploadRequest {
+                UploadedFileName = name,
+                FileSize = sourceBlobClient.GetProperties().Value.ContentLength,
+                UploadFinishedAt = uploadFinishedAt
+            });
 
-        //_logger.LogInformation($"Upload confirmation result: {result}");
+        _logger.LogInformation($"Upload confirmation result: {result}");
     }
 
 
