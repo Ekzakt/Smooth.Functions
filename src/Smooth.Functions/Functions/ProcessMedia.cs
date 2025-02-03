@@ -4,22 +4,30 @@ using Ekzakt.FileChecker.Contracts;
 using Ekzakt.RemoteApiService.Services;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Smooth.Functions.Configuration;
 using Smooth.Functions.Requests;
 
-namespace Smooth.Functions;
+namespace Smooth.Functions.Functions;
 
 public class ProcessMedia
 {
     private readonly ILogger<ProcessMedia> _logger;
+    private readonly BlobServiceClient _blobServiceClient;
+    private readonly FunctionOptions _functionOptions;
     private readonly ApiService _apiService;
     private readonly IFileChecker _fileChecker;
 
     public ProcessMedia(
         ILogger<ProcessMedia> logger,
+        BlobServiceClient blobServiceClient,
+        IOptions<FunctionOptions> functionOptions,
         ApiServiceFactory apiServiceFactory,
         IFileChecker fileChecker)
     {
         _logger = logger;
+        _blobServiceClient = blobServiceClient;
+        _functionOptions = functionOptions.Value;
         _apiService = apiServiceFactory.Create("SmoothShopApi");
         _fileChecker = fileChecker;
     }
@@ -27,7 +35,7 @@ public class ProcessMedia
 
     [Function(nameof(ProcessMedia))]
     public async Task Run(
-        [BlobTrigger("%SourceContainerName%/{name}", 
+        [BlobTrigger("%SourceContainerName%/{name}",
         Connection = "AzureWebJobsStorage")] Stream fileStream,
         string name)
     {
@@ -39,28 +47,27 @@ public class ProcessMedia
             return;
         }
 
-        var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage") ?? string.Empty;
         var apiUrl = Environment.GetEnvironmentVariable("ApiUrl") ?? string.Empty;
         var targetContainerName = Environment.GetEnvironmentVariable("TargetContainerName") ?? string.Empty;
         var sourceContainerName = Environment.GetEnvironmentVariable("SourceContainerName") ?? string.Empty;
 
-        var blobServiceClient = new BlobServiceClient(connectionString);
-        var sourceContainerClient = blobServiceClient.GetBlobContainerClient(sourceContainerName);
+        var sourceContainerClient = _blobServiceClient.GetBlobContainerClient(sourceContainerName);
         var sourceBlobClient = sourceContainerClient.GetBlobClient(name);
 
-        var targetContainerClient = blobServiceClient.GetBlobContainerClient(targetContainerName);
+        var targetContainerClient = _blobServiceClient.GetBlobContainerClient(targetContainerName);
         await targetContainerClient.CreateIfNotExistsAsync(PublicAccessType.None);
         var targetBlobClient = targetContainerClient.GetBlobClient(name);
 
-        
+
         _logger.LogInformation($"Copying blob '{name}' from '{sourceContainerName}' to '{targetContainerName}'...");
         await targetBlobClient.StartCopyFromUriAsync(sourceBlobClient.Uri);
         _logger.LogInformation($"Successfully copied blob '{name}' to container '{targetContainerName}'.");
 
 
         var result = await _apiService.PostDataAsync(
-            url: "/file/confirm", 
-            data: new ConfirmUploadRequest {
+            url: "/file/confirm",
+            data: new ConfirmUploadRequest
+            {
                 UploadedFileName = name,
                 FileSize = sourceBlobClient.GetProperties().Value.ContentLength,
                 UploadFinishedAt = uploadFinishedAt
