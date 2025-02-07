@@ -1,11 +1,12 @@
 using Microsoft.Azure.Functions.Worker.Builder;
-using Microsoft.Extensions.Hosting;
-using Ekzakt.RemoteApiService.Configuration;
-using Ekzakt.FileChecker.Configuration;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Azure;
-using Smooth.Functions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Smooth.Functions.Application.Configuration;
+using Smooth.Functions.Application.Managers;
+using Smooth.Functions.Infrastructure.Configuration;
+using Smooth.Shared.Application.Constants;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
@@ -16,17 +17,14 @@ builder.ConfigureFunctionsWebApplication();
 //     .AddApplicationInsightsTelemetryWorkerService()
 //     .ConfigureFunctionsApplicationInsights();
 
-builder.Services.AddFileChecker();
+var containerClientConnectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+ArgumentNullException.ThrowIfNull(containerClientConnectionString, nameof(containerClientConnectionString));
 
 builder.Services
     .AddOptions<FunctionOptions>()
     .BindConfiguration(FunctionOptions.SECTION_NAME);
 
-var containerClientConnectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
-if (string.IsNullOrWhiteSpace(containerClientConnectionString))
-{
-    throw new InvalidOperationException("AzureWebJobsStorage is not configured properly.");
-}
+builder.Services.AddScoped<IMediumManager, MediumManager>();
 
 builder.Services
     .AddAzureClients(clientBuilder => {
@@ -34,10 +32,10 @@ builder.Services
             .AddBlobServiceClient(containerClientConnectionString);
     });
 
-var apiUrl = builder.Configuration.GetValue<string>("ApiUrl");
+var apiUrl = builder.Configuration.GetValue<string>(ApiName.SMOOTH_SHOP);
 builder.Services.AddRemoteApiServices(new Dictionary<string, string>
 {
-    { "SmoothShopApi", apiUrl ?? string.Empty }
+    { ApiName.SMOOTH_SHOP, apiUrl ?? string.Empty }
 });
 
 builder.Build().Run();
