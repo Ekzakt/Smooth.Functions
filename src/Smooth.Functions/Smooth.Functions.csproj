@@ -26,8 +26,8 @@
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ekzakt.FileChecker\Ekzakt.FileChecker.csproj" />
-    <ProjectReference Include="..\Ekzakt.RemoteApiService\Ekzakt.RemoteApiService.csproj" />
+    <ProjectReference Include="..\Smooth.Functions.Application\Smooth.Functions.Application.csproj" />
+    <ProjectReference Include="..\Smooth.Functions.Infrastructure\Smooth.Functions.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
